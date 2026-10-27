@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Domotron Acoustics - Ponto Obra</title>
+  <style>
+    :root {
+      --bg-dark: #0b111e;
+      --card-bg: #131c2e;
+      --card-border: #1e2c45;
+      --accent-blue: #0077ff;
+      --accent-cyan: #00d2ff;
+      --text-white: #ffffff;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+      --success: #10b981;
+      --warning: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-bottom: 30px;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* CABEÇALHO COM LOGOTIPO DOMOTRON */
+    .brand-header {
+      background: #ffffff;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--accent-blue);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-svg {
+      height: 36px;
+      width: auto;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lang-btn {
+      background: #0f172a;
+      color: #fff;
+      border: 1px solid #334155;
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .admin-icon-btn {
+      background: #0f172a;
+      color: #94a3b8;
+      border: 1px solid #334155;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* CARTÕES */
+    .clock-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      margin: 0 10px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .digital-clock {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #ffffff;
+      text-shadow: 0 0 12px rgba(0, 195, 255, 0.4);
+    }
+
+    .date-str {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+      margin-top: 2px;
+      text-transform: capitalize;
+    }
+
+    .gps-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      margin: 0 10px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .gps-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gps-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--warning);
+    }
+
+    .gps-title {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .gps-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .geofence-tag {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+      background: #1e293b;
+      color: #94a3b8;
+    }
+
+    .geofence-tag.inside {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+    }
+
+    .geofence-tag.outside {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    .form-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      margin: 0 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .input-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .custom-select {
+      width: 100%;
+      background: #0a101d;
+      border: 1.5px solid #243552;
+      color: #fff;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 0 10px;
+    }
+
+    .clock-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 15px 8px;
+      color: #ffffff;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .clock-btn:active {
+      opacity: 0.85;
+      transform: scale(0.98);
+    }
+
+    .clock-btn svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .clock-btn .main-text {
+      font-size: 14px;
+    }
+
+    .clock-btn .sub-text {
+      font-size: 10px;
+      opacity: 0.85;
+      font-weight: 500;
+    }
+
+    .btn-morning-in { background: linear-gradient(135deg, #0284c7, #0369a1); }
+    .btn-lunch-out { background: linear-gradient(135deg, #d97706, #b45309); }
+    .btn-lunch-in { background: linear-gradient(135deg, #059669, #047857); }
+    .btn-day-out { background: linear-gradient(135deg, #dc2626, #b91c1c); }
+
+    .history-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      margin: 0 10px;
+      padding: 12px;
+    }
+
+    .history-header {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      background: #0c1424;
+      border: 1px solid #1c2b44;
+      padding: 8px 10px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .history-tag {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
+    }
+
+    /* MODAIS */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .pin-pad-card {
+      background: var(--card-bg);
+      border: 1px solid #293d61;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 310px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .pin-dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .pin-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid #334d77;
+    }
+
+    .pin-dot.filled {
+      background: var(--accent-cyan);
+      border-color: var(--accent-cyan);
+    }
+
+    .pin-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .pin-btn {
+      background: #18243c;
+      border: 1px solid #293d61;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      padding: 12px 0;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .admin-container {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--bg-dark);
+      z-index: 1100;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .admin-nav {
+      background: #10192a;
+      padding: 12px 16px;
+      border-bottom: 1px solid #233452;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .admin-body {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .admin-box {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .admin-box-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+      max-height: 220px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 6px 4px;
+      border-bottom: 1px solid #1f2d47;
+    }
+
+    th { color: var(--text-muted); }
+
+    .btn-action {
+      background: var(--accent-blue);
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .btn-danger { background: #7f1d1d; }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0f172a;
+      border: 1px solid var(--accent-cyan);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      transition: transform 0.3s ease;
+      z-index: 2000;
+    }
+
+    .toast-msg.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+
+    <!-- CABEÇALHO COM LOGOTIPO DOMOTRON ACOUSTICS -->
+    <header class="brand-header">
+      <div class="logo-container">
+        <svg class="logo-svg" viewBox="0 0 460 95" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <text x="5" y="48" font-family="'Arial Black', sans-serif" font-weight="900" font-size="44" fill="#000000" letter-spacing="-1">DOMOTRON</text>
+          <text x="105" y="76" font-family="'Arial', sans-serif" font-weight="900" font-size="19" fill="#000000" letter-spacing="4.5">ACOUSTICS</text>
+          <g transform="translate(285, 0)">
+            <defs>
+              <linearGradient id="blueRibbonTop" x1="0%" y1="0%" x2="100%" y2="50%">
+                <stop offset="0%" stop-color="#00C8FF"/>
+                <stop offset="100%" stop-color="#0066FF"/>
+              </linearGradient>
+              <linearGradient id="blueRibbonRight" x1="50%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#0052FF"/>
+                <stop offset="100%" stop-color="#0029B3"/>
+              </linearGradient>
+              <linearGradient id="greenBlade" x1="0%" y1="100%" x2="50%" y2="0%">
+                <stop offset="0%" stop-color="#4B9400"/>
+                <stop offset="50%" stop-color="#70B800"/>
+                <stop offset="100%" stop-color="#A2E200"/>
+              </linearGradient>
+            </defs>
+            <path d="M5 68 L34 16 L48 68 L36 68 L32 36 L16 68 Z" fill="url(#greenBlade)"/>
+            <path d="M12 18 L70 5 L88 24 L78 62 L66 85 L52 85 L68 58 L72 26 L12 18 Z" fill="url(#blueRibbonTop)"/>
+            <path d="M78 62 L66 85 L35 85 L56 68 L68 58 Z" fill="url(#blueRibbonRight)"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" class="lang-btn" onclick="cycleLanguage()">
+          <span id="langFlag">🇵🇹</span>
+          <span id="langText">PT</span>
+        </button>
+        <button type="button" class="admin-icon-btn" onclick="openPinModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- RELÓGIO & DATA -->
+    <div class="clock-card">
+      <div class="digital-clock" id="clockDisplay">12:00:00</div>
+      <div class="date-str" id="dateDisplay">A carregar data...</div>
+    </div>
+
+    <!-- GPS & ESTADO -->
+    <div class="gps-card" onclick="requestGpsManual()" style="cursor:pointer;">
+      <div class="gps-status">
+        <div class="gps-dot" id="gpsDot"></div>
+        <div>
+          <div class="gps-title" id="txtGpsTitle">GPS Localização</div>
+          <div class="gps-sub" id="gpsCoordsText">Toque aqui para captar GPS</div>
+        </div>
+      </div>
+      <div class="geofence-tag" id="geofenceBadge">A VERIFICAR</div>
+    </div>
+
+    <!-- SELEÇÃO -->
+    <div class="form-card">
+      <div>
+        <label class="input-label" id="lblWorker">Nome do Trabalhador</label>
+        <select class="custom-select" id="workerSelect">
+          <option value="Élvio Silva">Élvio Silva</option>
+          <option value="Ilson costa">Ilson costa</option>
+          <option value="Raj kumar">Raj kumar</option>
+          <option value="Lachhman Kumar">Lachhman Kumar</option>
+          <option value="Jatinder Kumar">Jatinder Kumar</option>
+          <option value="Bhupinder Singh">Bhupinder Singh</option>
+          <option value="Rohit Kumar">Rohit Kumar</option>
+          <option value="Harjit Ram">Harjit Ram</option>
+          <option value="Gursimranjit Singh">Gursimranjit Singh</option>
+          <option value="Helder Tavares">Helder Tavares</option>
+          <option value="Sulemane Mane">Sulemane Mane</option>
+          <option value="Gracelino Fidalgo">Gracelino Fidalgo</option>
+          <option value="Paramjit Kumar">Paramjit Kumar</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="input-label" id="lblSite">Obra / Local de Trabalho</label>
+        <select class="custom-select" id="siteSelect" onchange="checkGeofence()"></select>
+      </div>
+    </div>
+
+    <!-- 4 BOTÕES DE PONTO -->
+    <div class="actions-grid">
+      <button type="button" class="clock-btn btn-morning-in" onclick="registerPunch('IN_MORNING')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line></svg>
+        <span class="main-text" id="btnMorningIn">Entrada Manhã</span>
+        <span class="sub-text" id="subMorningIn">Início de Turno</span>
+      </button>
+
+      <button type="button" class="clock-btn btn-lunch-out" onclick="registerPunch('OUT_LUNCH')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+        <span class="main-text" id="btnLunchOut">Saída Almoço</span>
+        <span class="sub-text" id="subLunchOut">Pausa / Comida</span>
+      </button>
+
+      <button type="button" class="clock-btn btn-lunch-in" onclick="registerPunch('IN_AFTERNOON')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+        <span class="main-text" id="btnLunchIn">Entrada Tarde</span>
+        <span class="sub-text" id="subLunchIn">Regresso Trabalho</span>
+      </button>
+
+      <button type="button" class="clock-btn btn-day-out" onclick="registerPunch('OUT_DAY')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        <span class="main-text" id="btnDayOut">Saída Fim de Dia</span>
+        <span class="sub-text" id="subDayOut">Término de Turno</span>
+      </button>
+    </div>
+
+    <!-- REGISTOS DO DIA -->
+    <div class="history-card">
+      <div class="history-header">
+        <span id="txtRecentTitle">Picagens de Hoje</span>
+        <span id="todayCountBadge">0 Registos</span>
+      </div>
+      <div class="history-list" id="recentList"></div>
+    </div>
+
+  </div>
+
+  <!-- MODAL PIN -->
+  <div class="modal-overlay" id="pinModal">
+    <div class="pin-pad-card">
+      <h3 style="font-size:16px; margin-bottom: 4px;">Código de Supervisor</h3>
+      <p style="font-size:12px; color:var
+
